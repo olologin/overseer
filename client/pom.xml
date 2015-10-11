@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>wildfly</groupId>
+            <groupId>ru.hdghg.spy</groupId>
             <artifactId>ejb</artifactId>
             <version>1.0</version>
         </dependency>
