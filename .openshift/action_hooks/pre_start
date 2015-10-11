@@ -1,1 +1,1 @@
-export _JAVA_OPTIONS="-Duser.timezone=Europe/Moscow"
+export JAVA_OPTS="-Duser.timezone=Europe/Moscow"
