@@ -42,7 +42,6 @@ public class SpyServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Date is:" + new Date() + "</h1>");
-            out.println("<h2>Container-managed Concurrency</h2>");
             out.println("Spybean start " + spyBean.start() + "<br />");
             out.println("Spybean stop " + spyBean.stop() + "<br />");
             out.println("</body>");
