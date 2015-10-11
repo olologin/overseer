@@ -1,5 +1,8 @@
 package wildfly.wildfly.web.servlet;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
+import org.slf4j.LoggerFactory;
 import wildfly.wildfly.ejb.SpyBean;
 
 import javax.inject.Inject;
@@ -24,10 +27,12 @@ public class SpyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("Page called");
+        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+        StatusPrinter.print(lc);
+
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            log.debug("Page called");
-
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
