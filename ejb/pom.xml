@@ -18,7 +18,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>wildfly</groupId>
+            <groupId>ru.hdghg.spy</groupId>
             <artifactId>system</artifactId>
             <version>1.0</version>
         </dependency>
