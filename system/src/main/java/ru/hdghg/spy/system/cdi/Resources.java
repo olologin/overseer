@@ -1,4 +1,4 @@
-package wildfly.wildfly.system.cdi;
+package ru.hdghg.spy.system.cdi;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;

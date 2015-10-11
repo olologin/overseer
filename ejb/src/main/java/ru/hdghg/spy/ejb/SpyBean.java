@@ -1,4 +1,4 @@
-package wildfly.wildfly.ejb;
+package ru.hdghg.spy.ejb;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
