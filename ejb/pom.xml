@@ -5,7 +5,7 @@
   <parent>
     <artifactId>base</artifactId>
     <groupId>ru.hdghg.spy</groupId>
-    <version>1.0.1</version>
+    <version>${spy.version}</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -19,25 +19,9 @@
         </dependency>
         <dependency>
             <groupId>ru.hdghg.spy</groupId>
-            <artifactId>system</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.igniterealtime.smack</groupId>
-            <artifactId>smack-core</artifactId>
-            <version>${smack.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.igniterealtime.smack</groupId>
-            <artifactId>smack-extensions</artifactId>
-            <version>${smack.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.igniterealtime.smack</groupId>
-            <artifactId>smack-tcp</artifactId>
-            <version>${smack.version}</version>
+            <artifactId>service</artifactId>
+            <version>${spy.version}</version>
         </dependency>
     </dependencies>
-
 
 </project>

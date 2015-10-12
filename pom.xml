@@ -5,12 +5,13 @@
     <groupId>ru.hdghg.spy</groupId>
     <artifactId>base</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>${spy.version}</version>
     <modules>
         <module>ejb</module>
         <module>web</module>
         <module>client</module>
-        <module>system</module>
+        <module>service</module>
+        <module>muc</module>
     </modules>
 
     <dependencies>
@@ -25,7 +26,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-        <smack.version>4.0.0</smack.version>
+        <smack.version>4.1.4</smack.version>
+        <spy.version>1.0.2</spy.version>
     </properties>
 
 </project>

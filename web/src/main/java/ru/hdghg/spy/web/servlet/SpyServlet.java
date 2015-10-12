@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.hdghg.spy.ejb.SpyBean;
 
 @WebServlet(urlPatterns = {"/spy"})
@@ -19,8 +20,7 @@ public class SpyServlet extends HttpServlet {
     @Inject
     private SpyBean spyBean;
 
-    @Inject
-    private Logger log;
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

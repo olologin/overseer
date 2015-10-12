@@ -5,7 +5,7 @@
   <parent>
     <artifactId>base</artifactId>
     <groupId>ru.hdghg.spy</groupId>
-    <version>1.0.1</version>
+    <version>${spy.version}</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>web</artifactId>
@@ -32,12 +32,12 @@
     <dependency>
       <groupId>ru.hdghg.spy</groupId>
       <artifactId>ejb</artifactId>
-      <version>1.0.1</version>
+      <version>${spy.version}</version>
     </dependency>
     <dependency>
       <groupId>ru.hdghg.spy</groupId>
-      <artifactId>system</artifactId>
-      <version>1.0.1</version>
+      <artifactId>muc</artifactId>
+      <version>${spy.version}</version>
     </dependency>
   </dependencies>
   <profiles>
