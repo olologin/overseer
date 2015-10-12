@@ -24,7 +24,7 @@ public class SpyBean {
     @Lock(LockType.WRITE)
     public boolean stop() {
         log.info("Stop called");
-        return false;
+        return true;
     }
 
 }
