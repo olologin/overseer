@@ -21,7 +21,7 @@
         <dependency>
             <groupId>ru.hdghg.spy</groupId>
             <artifactId>service</artifactId>
-            <version>1.0.1</version>
+            <version>${spy.version}</version>
         </dependency>
         <dependency>
             <groupId>org.igniterealtime.smack</groupId>
