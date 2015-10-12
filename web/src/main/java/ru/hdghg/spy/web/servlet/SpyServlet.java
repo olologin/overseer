@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.function.BooleanSupplier;
 
 import org.slf4j.Logger;
 import ru.hdghg.spy.ejb.SpyBean;
@@ -26,9 +25,7 @@ public class SpyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.info("Page called");
-
-        String acn = request.getParameter("action");
-        BooleanSupplier b = "start".equals(acn) ? spyBean::start : "stop".equals(acn) ? spyBean::stop : () -> false;
+        String action = request.getParameter("action");
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -39,7 +36,11 @@ public class SpyServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Date is:" + new Date() + "</h1>");
-            out.println("Action run: " + b.getAsBoolean() + "<br />");
+            out.println("Action run: " + ("start".equals(action)
+                ? spyBean.start()
+                : "stop".equals(action)
+                    ? spyBean.stop()
+                    : "no action") + "<br />");
             out.println("</body>");
             out.println("</html>");
         }
