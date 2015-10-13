@@ -54,6 +54,7 @@ public class MucWorker implements SpyWorker {
             StatusListener statusListener = new StatusListener();
             statusListener.setStorage(storage);
             statusListener.setMultiUserChat(muc);
+            statusListener.setOccupants(muc.getOccupants());
             muc.addParticipantListener(statusListener);
         } catch (Exception ex) {
             log.error("error", ex);
@@ -61,7 +62,7 @@ public class MucWorker implements SpyWorker {
             if (null == message) {
                 message = ex.getClass().getSimpleName();
             }
-            return new WorkerResult(false, ex.getMessage());
+            return new WorkerResult(false, message);
         }
         return new WorkerResult(true, "Connected");
     }

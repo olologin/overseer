@@ -12,15 +12,21 @@ import ru.hdghg.spy.service.dao.Storage;
 import ru.hdghg.spy.service.model.History;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class StatusListener implements PacketListener {
 
     @Setter private MultiUserChat multiUserChat;
     @Setter private Storage storage;
+    private Map<String, String> occupantsJids = new HashMap<>();
 
-    public void setMultiUserChat(MultiUserChat multiUserChat) {
-        this.multiUserChat = multiUserChat;
+    public void setOccupants(Iterable<String> occupants) {
+        occupantsJids.clear();
+        for (String occupant: occupants) {
+            occupantsJids.put(occupant, getJid(occupant));
+        }
     }
 
     @Override
@@ -30,23 +36,28 @@ public class StatusListener implements PacketListener {
             return;
         }
         Presence presence = (Presence) packet;
-        presence.getFrom();
         String from = packet.getFrom();
         if (null == from || "".equals(from)) {
             log.debug("Failed to extract sender name from muc");
             return;
         }
         String jid = getJid(from);
+        // TODO: if jid is not available, wait and try again.
         if (null == jid || "".equals(jid)) {
-            log.debug("Failed to get jid by name");
-            return;
+            jid = occupantsJids.get(from);
+            if (null == jid || "".equals(jid)) {
+                log.debug("Failed to get jid by name");
+                return;
+            }
+        } else {
+            occupantsJids.put(from, jid);
         }
         Presence.Mode mode = presence.getMode();
-        String status = null != mode ? mode.toString() : null;
-        if (null != status) {
+        String status = null != mode ? mode.toString() : presence.getType().toString();
+        if (null != status && !"".equals(status)) {
             History history = new History(jid, status, new Date());
             storage.save(history);
-            log.info("Persisted {}", history);
+            log.info("Persisted status {}", history);
         }
     }
 

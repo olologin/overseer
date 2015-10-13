@@ -37,7 +37,7 @@ public class MessageListener implements PacketListener{
         }
         History history = new History(jid, null, new Date());
         storage.save(history);
-        log.info("Persisted {}", history);
+        log.info("Persisted message {}", history);
     }
 
     private String getJid(String from) {
