@@ -26,14 +26,16 @@ public class MucWorker implements SpyWorker {
     @Override
     public WorkerResult startSpy() {
         storage.save(new History("dfdf", null, new Date()));
-        String xmppServer = "adastra.re";
-        String xmppUsername = "overseer";
+        String xmppServer = "jabbim.cz";
+        String xmppUsername = "overs33r";
         String xmppPassword = "rfrek.ltq";
         String xmppResource = "res";
         String mucRoom = "s@pyos.anoosdy.org";
         String mucName = "overseer";
         String mucPassword = "";
-        ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(xmppServer);
+        ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration("conn443.netlab.cz", 443, xmppServer);
+
+        connectionConfiguration.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
         if (null != xmppc && xmppc.isConnected()) {
             log.error("Already connected");
             return new WorkerResult(false, "Already connected");
