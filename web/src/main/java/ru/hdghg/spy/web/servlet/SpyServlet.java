@@ -10,22 +10,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ru.hdghg.spy.ejb.SpyBean;
+import ru.hdghg.spy.service.WorkerResult;
 
 @WebServlet(urlPatterns = {"/spy"})
+@Slf4j
 public class SpyServlet extends HttpServlet {
 
     @Inject
     private SpyBean spyBean;
 
-    private Logger log = LoggerFactory.getLogger(getClass());
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.info("Page called");
         String action = request.getParameter("action");
+
+        //em.persist(new History("dfdf", null, new Date()));
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -36,11 +37,18 @@ public class SpyServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Date is:" + new Date() + "</h1>");
-            out.println("Action run: " + ("start".equals(action)
-                ? spyBean.start()
-                : "stop".equals(action)
-                    ? spyBean.stop()
-                    : "no action") + "<br />");
+
+            out.println("Action run: <br />");
+            if ("start".equals(action)) {
+                for (WorkerResult workerResult : spyBean.start()) {
+                    out.println(String.format("<p>%s</p>", workerResult));
+                }
+            }
+            if ("stop".equals(action)) {
+                for (WorkerResult workerResult : spyBean.stop()) {
+                    out.println(String.format("<p>%s</p>", workerResult));
+                }
+            }
             out.println("</body>");
             out.println("</html>");
         }

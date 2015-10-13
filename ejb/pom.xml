@@ -22,6 +22,11 @@
             <artifactId>service</artifactId>
             <version>${spy.version}</version>
         </dependency>
+      <dependency>
+        <groupId>ru.hdghg.spy</groupId>
+        <artifactId>muc</artifactId>
+        <version>${spy.version}</version>
+      </dependency>
     </dependencies>
 
 </project>

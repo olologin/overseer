@@ -24,19 +24,13 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>7.0</version>
-      <scope>provided</scope>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.184</version>
     </dependency>
     <dependency>
       <groupId>ru.hdghg.spy</groupId>
       <artifactId>ejb</artifactId>
-      <version>${spy.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ru.hdghg.spy</groupId>
-      <artifactId>muc</artifactId>
       <version>${spy.version}</version>
     </dependency>
   </dependencies>
