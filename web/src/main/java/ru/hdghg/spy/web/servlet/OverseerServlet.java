@@ -50,6 +50,7 @@ public class OverseerServlet extends HttpServlet {
         calendar.setTime(messages.get(0).getTimestamp());
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int counter = 0;
+        resp.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
