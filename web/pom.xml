@@ -34,11 +34,6 @@
       <version>${spy.version}</version>
     </dependency>
     <dependency>
-      <groupId>ru.hdghg.spy</groupId>
-      <artifactId>model</artifactId>
-      <version>${spy.version}</version>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
