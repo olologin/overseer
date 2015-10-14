@@ -32,7 +32,7 @@ public class MessageListener implements PacketListener{
         }
         String jid = getJid(from);
         if (null == jid || "".equals(jid)) {
-            log.debug("Failed to get jid by name");
+            log.debug("Failed to get jid by name: {}", from);
             return;
         }
         History history = new History(jid, null, new Date());
