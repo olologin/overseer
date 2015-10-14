@@ -25,9 +25,6 @@ public class SpyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.info("Page called");
         String action = request.getParameter("action");
-
-        //em.persist(new History("dfdf", null, new Date()));
-
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");

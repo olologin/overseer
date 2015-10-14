@@ -41,24 +41,33 @@ public class StatusListener implements PacketListener {
             log.debug("Failed to extract sender name from muc");
             return;
         }
-        String jid = getJid(from);
-        // TODO: if jid is not available, wait and try again.
-        if (null == jid || "".equals(jid)) {
-            jid = occupantsJids.get(from);
-            if (null == jid || "".equals(jid)) {
-                log.debug("Failed to get jid by name");
-                return;
-            }
-        } else {
-            occupantsJids.put(from, jid);
-        }
         Presence.Mode mode = presence.getMode();
         String status = null != mode ? mode.toString() : presence.getType().toString();
-        if (null != status && !"".equals(status)) {
-            History history = new History(jid, status, new Date());
-            storage.save(history);
-            log.info("Persisted status {}", history);
+
+        String jid = getJid(from);
+        if (null == jid) {
+            log.debug("Can not get jid directly, trying another ways");
+            if ("available".equals(status)) {
+                AsyncJidResolver asyncJidResolver = new AsyncJidResolver();
+                asyncJidResolver.setDate(new Date());
+                asyncJidResolver.setFrom(from);
+                asyncJidResolver.setMultiUserChat(multiUserChat);
+                asyncJidResolver.setStatus(status);
+                asyncJidResolver.setStorage(storage);
+                new Thread(asyncJidResolver).start();
+                return;
+            } else {
+                jid = occupantsJids.get(from);
+                if (null == jid || "".equals(jid)) {
+                    log.debug("Failed to get jid by name: {}", from);
+                    return;
+                }
+            }
         }
+        History history = new History(jid, status, new Date());
+        storage.save(history);
+        log.info("Persisted status {}", history);
+        occupantsJids.put(from, jid);
     }
 
     private String getJid(String from) {

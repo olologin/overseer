@@ -25,7 +25,6 @@ public class MucWorker implements SpyWorker {
 
     @Override
     public WorkerResult startSpy() {
-        storage.save(new History("dfdf", null, new Date()));
         String xmppServer = "jabbim.cz";
         String xmppUsername = "overs33r";
         String xmppPassword = "rfrek.ltq";

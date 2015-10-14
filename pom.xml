@@ -12,6 +12,7 @@
     <module>client</module>
     <module>service</module>
     <module>muc</module>
+    <module>model</module>
   </modules>
 
   <dependencies>
