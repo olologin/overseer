@@ -24,6 +24,11 @@ public class OverseerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String ipAddress = req.getHeader("X-FORWARDED-FOR");
+        if (null == ipAddress) {
+            ipAddress = req.getRemoteAddr();
+        }
+        log.debug("Overseer request from {}", ipAddress);
         List<History> allHistory = storage.all();
         List<History> messages = new LinkedList<>();
         for (History history : allHistory) {
