@@ -9,7 +9,7 @@
         <jta-data-source>jboss/datasources/PostgreSQLDS</jta-data-source>
         <class>ru.hdghg.spy.service.model.History</class>
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         </properties>
 
