@@ -3,6 +3,7 @@ package ru.hdghg.spy.muc;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -32,6 +33,7 @@ public class MucWorker implements SpyWorker {
         String mucRoom = "s@pyos.anoosdy.org";
         String mucName = "overseer";
         String mucPassword = "";
+        SmackConfiguration.setDefaultPacketReplyTimeout(15000);
         ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration("conn443.netlab.cz", 443, xmppServer);
 
         connectionConfiguration.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
@@ -70,8 +72,12 @@ public class MucWorker implements SpyWorker {
     public WorkerResult stopSpy() {
         log.info("Worker stopped");
         try {
-            muc.leave();
-            xmppc.disconnect();
+            if (null != muc) {
+                muc.leave();
+            }
+            if (null != xmppc) {
+                xmppc.disconnect();
+            }
         } catch (SmackException.NotConnectedException e) {
             return new WorkerResult(false, "Not connected");
         } finally {
