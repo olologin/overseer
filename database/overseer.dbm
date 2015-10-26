@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.7.2" last-position="0,0" last-zoom="1">
+<database name="wildfly" encoding="UTF8" lc-collate="C" lc-ctype="C">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" protected="true" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<sequence name="history_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="history" unlogged="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="50" y="50"/>
+	<column name="id" not-null="true" default-value="nextval('history_id_seq'::regclass)">
+		<type name="bigint"/>
+	</column>
+	<column name="jid">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="status">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="timestamp">
+		<type name="timestamp"/>
+	</column>
+	<constraint name="history_pkey" type="pk-constr" factor="100" table="public.history">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+</dbmodel>
