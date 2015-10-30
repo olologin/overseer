@@ -41,4 +41,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
+<table name="version">
+	<schema name="public"/>
+	<position x="407" y="41"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+</table>
+
 </dbmodel>
