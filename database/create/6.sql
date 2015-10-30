@@ -53,3 +53,14 @@ CREATE TABLE public.version(
 );
 -- ddl-end --
 
+delete from
+    version
+;
+
+insert into
+    version(
+        id
+    )
+values
+    6
+;
