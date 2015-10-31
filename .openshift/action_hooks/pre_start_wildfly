@@ -1,1 +1,3 @@
+#!/bins/sh
 export JAVA_OPTS_EXT="-Duser.timezone=Europe/Moscow"
+$OPENSHIFT_REPO_DIR/database/ssmw/run_server.sh
