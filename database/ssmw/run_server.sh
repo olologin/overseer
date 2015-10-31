@@ -5,4 +5,4 @@ export REQUIRED_VER="$(cat $OPENSHIFT_REPO_DIR/database/version.properties)"
 export PGLOGIN=$OPENSHIFT_POSTGRESQL_DB_USERNAME
 export GIVEN_VER="$(psql -c 'copy (select 1) to stdout;' -q -U $PGLOGIN)"
 
-python $OPENSHIFT_REPO_DIR/database/ssmw/ssmw.py $CREATION $MIGRATION $GIVEN_VER $REQUIRED_VER | while read line ; do echo psql -q -a -U $PGLOGIN -f $line ; done 
+python $OPENSHIFT_REPO_DIR/database/ssmw/ssmw.py $CREATION $MIGRATION $GIVEN_VER $REQUIRED_VER | while read line ; do psql -q -a -U $PGLOGIN -f $line ; done 
