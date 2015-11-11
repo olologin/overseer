@@ -29,9 +29,9 @@ def shortest_path(structure, start, goal):
 def files(structure, start, goal):
     way = shortest_path(structure, start, goal)
     if way is None:
-        sys.stderr.write("ERROR: Migration path is unreachable!")
+        sys.stderr.write("ERROR: Migration path is unreachable!\n")
     elif len(way) == 1:
-        sys.stderr.write("INFO : Already here, skipping")
+        sys.stderr.write("INFO : Already here, skipping\n")
     else:
         previous_value = None
         for next_value in list(way):

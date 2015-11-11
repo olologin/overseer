@@ -21,7 +21,6 @@
          <groupId>ru.hdghg</groupId>
          <artifactId>overseer-ejb</artifactId>
          <type>ejb</type>
-         <scope>provided</scope>
       </dependency>
 
       <!-- Import the JAX-RS API, we use provided scope as the API is included in JBoss WildFly -->
@@ -44,6 +43,18 @@
          <artifactId>jboss-jsf-api_2.2_spec</artifactId>
          <scope>provided</scope>
       </dependency>
+
+      <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-api</artifactId>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-classic</artifactId>
+      </dependency>
+
 
       <!-- Import the JPA API, we use provided scope as the API is included in JBoss WildFly -->
       <dependency>

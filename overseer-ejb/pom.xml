@@ -16,6 +16,23 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>ru.hdghg</groupId>
+            <artifactId>overseer-persist</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hdghg</groupId>
+            <artifactId>overseer-muc</artifactId>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
         <!-- Declare the APIs we depend on and need for compilation. All of 
             them are provided by JBoss WildFly -->
 
@@ -110,37 +127,5 @@
                 </plugins>
             </build>
         </profile>
-
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests 
-                in your WildFly instance -->
-            <!-- This profile will start a new WildFly instance, and execute
-                the test, shutting it down when done -->
-            <!-- Run with: mvn clean test -Parq-wildfly-managed -->
-            <id>arq-wildfly-managed</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests 
-                in a remote WildFly instance -->
-            <!-- Run with: mvn clean test -Parq-wildfly-remote -->
-            <id>arq-wildfly-remote</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
     </profiles>
-
 </project>

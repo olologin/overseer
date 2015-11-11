@@ -12,19 +12,26 @@
         <module>overseer-ejb</module>
         <module>overseer-web</module>
         <module>overseer-ear</module>
+        <module>overseer-model</module>
+        <module>overseer-persist</module>
+        <module>overseer-muc</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.ee.version>7.0</java.ee.version>
+
+        <!-- smack -->
+
+        <smack.version>4.0.0</smack.version>
 
         <!-- JBoss dependency versions -->
         
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
         <!-- Define the version of the JBoss BOMs we want to import to specify tested stacks. -->
-        <version.jboss.bom>8.2.1.Final</version.jboss.bom>
+        <version.jboss.bom>9.0.0.Beta2</version.jboss.bom>
         <version.wildfly>9.0.2.Final</version.wildfly>
-
 
         <!-- other plugin versions -->
         <version.compiler.plugin>3.1</version.compiler.plugin>
@@ -49,8 +56,7 @@
                 <version>${project.version}</version>
                 <type>ejb</type>
             </dependency>
-            
-            <!-- Define the version of the WAR so that we don't need to repeat 
+            <!-- Define the version of the WAR so that we don't need to repeat
                 ourselves in every module -->
             <dependency>
                 <groupId>ru.hdghg</groupId>
@@ -58,6 +64,65 @@
                 <version>${project.version}</version>
                 <type>war</type>
                 <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.hdghg</groupId>
+                <artifactId>overseer-persist</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.hdghg</groupId>
+                <artifactId>overseer-model</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.hdghg</groupId>
+                <artifactId>overseer-muc</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.1.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-core</artifactId>
+                <version>${smack.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-extensions</artifactId>
+                <version>${smack.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-resolver-javax</artifactId>
+                <version>${smack.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.igniterealtime.smack</groupId>
+                <artifactId>smack-tcp</artifactId>
+                <version>${smack.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${java.ee.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!-- JBoss distributes a complete set of Java EE 7 APIs including
