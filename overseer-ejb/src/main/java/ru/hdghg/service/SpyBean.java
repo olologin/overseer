@@ -5,8 +5,6 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +23,6 @@ public class SpyBean {
 
     private List<MucWorker> workers = new ArrayList<>();
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Inject
     private HistoryManager historyManager;
 
@@ -42,7 +37,6 @@ public class SpyBean {
     public List<WorkerResult> start() {
         List<WorkerResult> result = new LinkedList<>();
         log.info("Start called");
-        log.debug("Entity manager is {}", em);
         for (MucWorker worker : workers) {
             result.add(worker.startSpy());
         }
