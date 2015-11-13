@@ -70,7 +70,7 @@
                 <groupId>ru.hdghg</groupId>
                 <artifactId>overseer-persist</artifactId>
                 <version>${project.version}</version>
-                <type>ejb</type>
+                <type>jar</type>
                 <scope>compile</scope>
             </dependency>
 
