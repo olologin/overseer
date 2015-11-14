@@ -32,6 +32,10 @@
             <artifactId>overseer-persist</artifactId>
             <type>ejb</type>
         </dependency>
+        <dependency>
+            <groupId>ru.hdghg</groupId>
+            <artifactId>overseer-configuration</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
