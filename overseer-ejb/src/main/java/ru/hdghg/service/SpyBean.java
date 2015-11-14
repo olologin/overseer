@@ -1,10 +1,10 @@
 package ru.hdghg.service;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +23,14 @@ public class SpyBean {
 
     private List<MucWorker> workers = new ArrayList<>();
 
-    @Inject
+    @EJB
     private HistoryManager historyManager;
 
     @PostConstruct
     public void postConstruct() {
-        MucWorker mucWorker = new MucWorker();
-        mucWorker.setHistoryManager(historyManager);
-        workers.add(mucWorker);
+        MucWorker spyWorker = new MucWorker();
+        spyWorker.setHistoryManager(historyManager);
+        workers.add(spyWorker);
     }
 
     @Lock(LockType.WRITE)

@@ -15,7 +15,7 @@
         <dependency>
             <groupId>ru.hdghg</groupId>
             <artifactId>overseer-persist</artifactId>
-            <type>jar</type>
+            <type>ejb</type>
         </dependency>
 
         <dependency>

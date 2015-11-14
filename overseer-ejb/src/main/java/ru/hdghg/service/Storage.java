@@ -4,14 +4,14 @@ package ru.hdghg.service;
 import ru.hdghg.jpa.HistoryManager;
 import ru.hdghg.model.History;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.util.List;
 
 @Stateless
 public class Storage {
 
-    @Inject
+    @EJB
     private HistoryManager historyManager;
 
     public void save(History history) {

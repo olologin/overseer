@@ -2,7 +2,7 @@ package ru.hdghg.jpa;
 
 import ru.hdghg.model.History;
 
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

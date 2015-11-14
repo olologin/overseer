@@ -19,7 +19,7 @@
         <dependency>
             <groupId>ru.hdghg</groupId>
             <artifactId>overseer-persist</artifactId>
-            <type>jar</type>
+            <type>ejb</type>
         </dependency>
 
         <dependency>
@@ -85,16 +85,4 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-ejb-plugin</artifactId>
-                <version>${version.ejb.plugin}</version>
-                <configuration>
-                    <!-- Tell Maven we are using EJB 3.2 -->
-                    <ejbVersion>3.2</ejbVersion>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
