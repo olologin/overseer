@@ -62,5 +62,5 @@ insert into
         id
     )
 values
-    6
+    (6)
 ;
