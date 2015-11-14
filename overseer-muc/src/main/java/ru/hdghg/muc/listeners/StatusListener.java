@@ -82,9 +82,8 @@ public class StatusListener implements PacketListener {
 
     public void setHistoryManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
+        historyManager.save(new History("qwe", "qwe", Calendar.getInstance()));
+        log.debug("History manager saved");
     }
 
-    public void setOccupantsJids(Map<String, String> occupantsJids) {
-        this.occupantsJids = occupantsJids;
-    }
 }

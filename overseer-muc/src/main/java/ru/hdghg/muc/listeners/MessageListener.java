@@ -48,6 +48,8 @@ public class MessageListener implements PacketListener {
 
     public void setHistoryManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
+        historyManager.save(new History("mes", "mes", Calendar.getInstance()));
+        log.debug("Saved mes.");
     }
 
     public void setMultiUserChat(MultiUserChat multiUserChat) {
