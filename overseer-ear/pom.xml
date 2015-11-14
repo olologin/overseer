@@ -74,6 +74,13 @@
                         <version>${version.ear.plugin}</version>
                         <configuration>
                             <outputDirectory>deployments</outputDirectory>
+                            <modules>
+                                <webModule>
+                                    <groupId>ru.hdghg</groupId>
+                                    <artifactId>overseer-web</artifactId>
+                                    <contextRoot>/</contextRoot>
+                                </webModule>
+                            </modules>
                         </configuration>
                     </plugin>
                 </plugins>
