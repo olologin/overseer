@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reports API</title>
+    <script src="http://fb.me/react-0.12.2.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
+    <script src="scripts/api.js" type="text/jsx"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div id="criteria" class="col-xs-12 col-sm-3 col-md-2">
+            <h3>Criteria</h3>
+            <h4>Jid:</h4>
+            <div class="btn-group">
+                <a class="btn btn-default dropdown-toggle btn-select" data-toggle="dropdown" href="#">Select a Jid
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">hdghg@jabbim.pl</a></li>
+                    <li><a href="#">luluphp@jabber.ru</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-asterisk"></span> All</a></li>
+                </ul>
+            </div>
+            <br />
+            <div id="selected_jids" style="margin-top: 4px">
+                <button type="button" class="btn btn-default">jester@nextus.me</button>
+            </div>
+            <h4>Start date:</h4>
+            <input type="date" title="start_date" />
+            <h4>End date:</h4>
+            <input type="date" title="end_date" />
+        </div>
+        <div id="result" class="col-xs-12 col-sm-9 col-md-10"><h3>Result</h3></div>
+    </div>
+</div>
+
+</body>
+</html>

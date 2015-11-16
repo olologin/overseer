@@ -22,4 +22,8 @@ public class Storage {
         return historyManager.all();
     }
 
+    public List<String> allJids() {
+        return historyManager.allJids();
+    }
+
 }

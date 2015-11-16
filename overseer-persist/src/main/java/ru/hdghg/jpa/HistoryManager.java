@@ -2,7 +2,7 @@ package ru.hdghg.jpa;
 
 import ru.hdghg.model.History;
 
-import javax.ejb.*;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -30,4 +30,8 @@ public class HistoryManager {
         return allQuery.getResultList();
     }
 
+    public List<String> allJids() {
+        return em.createQuery("select distinct h.jid from History h " +
+                "where jid != '' order by jid", String.class).getResultList();
+    }
 }
