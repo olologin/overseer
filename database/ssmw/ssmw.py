@@ -1,15 +1,27 @@
 #!/usr/bin/python
 import os
 import sys
+import tmp
+import subprocess
 
 
-def bfs_paths(structure, start, goal):
+def _bfs_paths(graph, start, goal):
+    """
+    :param graph: Adjacency dictionary, graph["3"]["2"] contains path to migration sql script
+    if there is any
+    :param start: starting point of bfs, for example start = "1" means that we want to find
+      all possible paths "1" to goal through migration scripts, if there is no version at the
+       moment - start should be None.
+    :param goal: Desired version, for example "7"
+    :return: Yields list of verticles on path from start to goal, according to adjacency from
+    graph dictionary, least length path yields earlier than longer path
+    """
     queue = [(start, [start])]
     while queue:
         (vertex, path) = queue.pop(0)
-        if vertex not in structure.keys():
+        if vertex not in graph:
             continue
-        remaining_paths = set(dict(structure[vertex]).keys()) - set(path)
+        remaining_paths = set(graph[vertex].keys()) - set(path)
         for next_value in remaining_paths:
             if next_value == goal:
                 yield path + [next_value]
@@ -17,32 +29,36 @@ def bfs_paths(structure, start, goal):
                 queue.append((next_value, path + [next_value]))
 
 
-def shortest_path(structure, start, goal):
-    if start == goal:
-        return set(start)
-    try:
-        return next(bfs_paths(structure, start, goal))
-    except StopIteration:
-        return None
+def _convert2filelist(graph, path):
+    """
+    Converts list of verticles to list of file paths (migrations, creation sql scripts)
+    :param graph: same as graph parameter in _bfs_paths
+    :param path: list of verticles which determines particular path through verticles
+                 for example ["3", "4", "5", "10"]
+    :return: List of creation/migration sql scripts, according to graph values at corresponding edges
+    """
+    return [graph[path[i]][path[i+1]] for i in range(len(path)-1)]
 
 
-def files(structure, start, goal):
-    way = shortest_path(structure, start, goal)
-    if way is None:
-        sys.stderr.write("ERROR: Migration path is unreachable!\n")
-    elif len(way) == 1:
-        sys.stderr.write("INFO : Already here, skipping\n")
-    else:
-        previous_value = None
-        for next_value in list(way):
-            if previous_value is not None:
-                yield structure[previous_value][next_value]
-            previous_value = next_value
+def _build_graph(creation_path, migration_path):
+    """
+    Creates graph (adjacency dictionary) for verticles from paths with creation and migration scripts
+    Each verticle in this graph - version, you can reach all creation scripts from None verticle (if
+    there is no version at the moment), i.e. graph[None]["1"] points on creation script for ver 1
+    1.sql graph["1"]["3"] points on migration script 1to3.sql
+    :param creation_path: path to creation folder
+    :param migration_path: path to migration folder
+    :return: adjacency dict for all found versions (verticles)
+    """
+    result = {None:{}}
+    for root, dirs, fileset in os.walk(creation_path):
+        for next_file in fileset:
+            if next_file.endswith(".sql"):
+                full_path = os.path.join(root, next_file)
+                b = next_file.replace(".sql", "")
+                result[None][b] = full_path
 
-
-def build_graph(start_path):
-    result = {}
-    for root, dirs, fileset in os.walk(start_path):
+    for root, dirs, fileset in os.walk(migration_path):
         for next_file in fileset:
             if next_file.endswith(".sql"):
                 full_path = os.path.join(root, next_file)
@@ -56,8 +72,96 @@ def build_graph(start_path):
     return result
 
 
-# The actual code starts here
+def shortest_path(creation_path, migration_path, start, goal):
+    """
+    :param creation_path: path to creation folder
+    :param migration_path: path to migration folder
+    :param start: starting point of bfs, for example start = "1" means that we want to find
+      all possible paths from version "1" to goal through migration scripts, if there is no
+      version at the moment - start should be None.
+    :param goal: Desired version, for example "7"
+    :return: yields list of filepaths, each filepath in this list could point on creation sql
+    script, or on migration script.
+    """
+    graph = _build_graph(creation_path, migration_path)
+    if start == goal:
+        sys.stderr.write("INFO: Scheme version is %s already, skipping\n" % (start))
+        return
+    for path in _bfs_paths(graph, start, goal):
+        sys.stderr.write("INFO: Yielding list: %s\n" % (path))
+        file_list = _convert2filelist(graph, path)
+        yield file_list
+    sys.stderr.write("ERROR: There is no any other " +
+                     "possible paths from %s to %s!\n" % (start, goal))
 
-all_files = build_graph(sys.argv[2])
-for nxt in files(all_files, sys.argv[3], sys.argv[4]):
-    print nxt
+
+class Psql:
+    def __init__(self, db_exec = "psql", db_pass=None, params = []):
+        self.password = db_pass
+        self.params   = params
+        self.psql     = db_exec
+
+    def execute_query(self, query=[]):
+        try:
+            call = [self.psql] + query + self.params
+            sys.stderr.write("INFO: Executing command %s"%call)
+            stdout = subprocess.check_output(call,
+                                             env=None if db_pass is None else {"PGPASSWORD":self.password})
+            return 0, stdout
+        except subprocess.CalledProcessError as e:
+            return e.returncode, e.output
+
+    def get_db_version(self, db_dbname):
+        errcode, output = self.execute_query(
+            ["-d", db_dbname, "-qc", "copy (select max(id) from version) to stdout"])
+
+        if errcode == 0:
+            return output
+        else:
+            sys.stderr.write("System returned this:" + output)
+            sys.stderr.write("There is no db scheme at all")
+            return None
+
+    def is_db_exists(self, db_dbname):
+        errcode, output = self.execute_query(["-lqtA"])
+        if errcode != 0:
+            # TODO Throw some error
+            return False
+
+        for line in output.splitlines():
+            dbname_ = line.split("|")[0] # Get table name exactly
+            if dbname_ == db_dbname:
+                return True
+        return False
+
+
+
+# The actual code starts here
+if __name__ == "__main__":
+
+    db_params = os.environ.get("DB_PARAMS")
+    db_pass   = os.environ.get("DB_PASS")
+    try:
+        db_exec   = os.environ["DB_EXEC"]
+        db_dbname = os.environ["DB_DBNAME"]
+        db_create = os.environ["DB_CREATE"]
+        db_migrate= os.environ["DB_MIGRATE"]
+        db_required_scheme = os.environ["DB_REQUIRED_SCHEME"]
+    except KeyError as e:
+        print("You haven't provided %s environment variable."%e.args[0])
+        sys.exit(78)
+
+
+    instance = Psql(db_exec, db_pass, ['-h', 'localhost'])
+
+    current = None
+    if instance.is_db_exists(db_dbname):
+        current = instance.get_db_version(db_dbname)
+    for filelist in shortest_path(sys.argv[1], sys.argv[2], current, sys.argv[3]):
+        err = 0
+        for file in filelist:
+            err, output = instance.execute_query(["--single-transaction", "-f", file])
+            if err != 0:
+                break
+        if err != 0:
+            break
