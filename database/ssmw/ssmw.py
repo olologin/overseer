@@ -1,7 +1,9 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+import logging as log
 import os
 import sys
-import tmp
+import tempfile
 import subprocess
 
 
@@ -85,26 +87,29 @@ def shortest_path(creation_path, migration_path, start, goal):
     """
     graph = _build_graph(creation_path, migration_path)
     if start == goal:
-        sys.stderr.write("INFO: Scheme version is %s already, skipping\n" % (start))
+        log.info("Scheme version is %s already, skipping\n" % (start))
         return
     for path in _bfs_paths(graph, start, goal):
-        sys.stderr.write("INFO: Yielding list: %s\n" % (path))
+        log.info("Yielding list: %s\n" % (path))
         file_list = _convert2filelist(graph, path)
         yield file_list
-    sys.stderr.write("ERROR: There is no any other " +
+    log.error("There is no any other " +
                      "possible paths from %s to %s!\n" % (start, goal))
 
 
 class Psql:
-    def __init__(self, db_exec = "psql", db_pass=None, params = []):
+    def __init__(self, db_exec = "psql", db_pass=None, params = ""):
         self.password = db_pass
-        self.params   = params
+        self.params   = self._string_param_to_list(params)
         self.psql     = db_exec
 
-    def execute_query(self, query=[]):
+    def _string_param_to_list(self, string_param):
+        return string_param.split(" ") if string_param != "" else []
+
+    def execute_query(self, query):
         try:
             call = [self.psql] + query + self.params
-            sys.stderr.write("INFO: Executing command %s"%call)
+            log.info("Executing command %s"%call)
             stdout = subprocess.check_output(call,
                                              env=None if db_pass is None else {"PGPASSWORD":self.password})
             return 0, stdout
@@ -118,8 +123,7 @@ class Psql:
         if errcode == 0:
             return output
         else:
-            sys.stderr.write("System returned this:" + output)
-            sys.stderr.write("There is no db scheme at all")
+            log.error("There is no db scheme at the moment")
             return None
 
     def is_db_exists(self, db_dbname):
@@ -138,6 +142,7 @@ class Psql:
 
 # The actual code starts here
 if __name__ == "__main__":
+    log.basicConfig(level=log.DEBUG)
 
     db_params = os.environ.get("DB_PARAMS")
     db_pass   = os.environ.get("DB_PASS")
@@ -148,20 +153,28 @@ if __name__ == "__main__":
         db_migrate= os.environ["DB_MIGRATE"]
         db_required_scheme = os.environ["DB_REQUIRED_SCHEME"]
     except KeyError as e:
-        print("You haven't provided %s environment variable."%e.args[0])
+        log.error("You haven't provided %s environment variable."%e.args[0])
         sys.exit(78)
 
 
-    instance = Psql(db_exec, db_pass, ['-h', 'localhost'])
+    instance = Psql(db_exec, db_pass, db_params)
 
     current = None
     if instance.is_db_exists(db_dbname):
         current = instance.get_db_version(db_dbname)
-    for filelist in shortest_path(sys.argv[1], sys.argv[2], current, sys.argv[3]):
-        err = 0
+    for filelist in shortest_path(db_create, db_migrate, current, db_required_scheme):
+        fd, merged_sql = tempfile.mkstemp(text=True, suffix=".sql")
+        log.info("Merging %s list of files into file %s"%(filelist, merged_sql))
+        tmpf = os.fdopen(fd, 'w')
         for file in filelist:
-            err, output = instance.execute_query(["--single-transaction", "-f", file])
-            if err != 0:
-                break
-        if err != 0:
+            with open(file) as f:
+                tmpf.write("\n -- %s\n"%file)
+                tmpf.writelines(f.readlines())
+        tmpf.write("\n")
+        tmpf.close()
+        log.info("Executing file %s as single transaction", merged_sql)
+        err, output = instance.execute_query(["--single-transaction", "-f", merged_sql])
+        if err == 0 and instance.get_db_version(db_dbname) == db_required_scheme:
+            log.info("migration completed!")
+            os.remove(merged_sql)
             break
