@@ -169,7 +169,7 @@ class Psql:
         stdout, stderr = p.communicate()
         returncode = p.returncode
 
-        if returncode != 0:
+        if stderr != "":
             raise DBException(stderr, returncode)
         return stdout
 
@@ -262,8 +262,8 @@ if __name__ == "__main__":
             tmpf.write("\n")
             tmpf.close()
             log.info("Executing file %s as single transaction", merged_sql)
-            err, output = instance.execute_query(["--single-transaction", "-f", merged_sql])
-            if err == 0 and instance.get_db_version(db_dbname) == db_required_scheme:
+            instance.execute_query(["--single-transaction", "-f", merged_sql])
+            if instance.get_db_version(db_dbname) == db_required_scheme:
                 log.info("migration completed!")
                 os.remove(merged_sql)
                 break
